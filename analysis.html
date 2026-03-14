@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wrong-Question Analysis</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="analysis">
+  <main class="container">
+    <section class="card">
+      <h1 class="title">Wrong-Question Analysis (Demo)</h1>
+      <p class="subtitle">Fill key details to get a structured analysis card. AI generation can be connected later.</p>
+
+      <form id="analysisForm" novalidate>
+        <div class="field">
+          <label for="questionText">Question Content *</label>
+          <textarea id="questionText" required placeholder="Paste question text here"></textarea>
+        </div>
+        <div class="field">
+          <label for="studentAnswer">Student Answer *</label>
+          <textarea id="studentAnswer" required placeholder="Paste student answer"></textarea>
+        </div>
+        <div class="field">
+          <label for="correctAnswer">Correct Answer *</label>
+          <textarea id="correctAnswer" required placeholder="Paste expected answer or key points"></textarea>
+        </div>
+        <div class="field">
+          <label for="selfReason">Self-judged reason (optional)</label>
+          <textarea id="selfReason" placeholder="e.g. careless sign mistake, formula confusion"></textarea>
+        </div>
+
+        <p class="error" id="analysisError" aria-live="polite"></p>
+
+        <div class="actions">
+          <button class="btn btn-primary" type="submit">Start Analysis</button>
+          <button class="btn btn-secondary" id="backHomeFromAnalysis" type="button">Back Home</button>
+        </div>
+      </form>
+
+      <div id="analysisResult"></div>
+    </section>
+  </main>
+
+  <script src="examData.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Paper Configuration</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="mock-config">
+  <main class="container">
+    <section class="card">
+      <h1 class="title">Mock Practice Configuration</h1>
+      <p class="subtitle">Configure question generation parameters. This round is flow-first, question generation is placeholder.</p>
+
+      <div class="summary">
+        <p><strong>Grade:</strong> <span id="selectedGrade">-</span></p>
+        <p><strong>Exam Board:</strong> <span id="selectedBoard">-</span></p>
+        <p><strong>Subject:</strong> <span id="selectedSubject">-</span></p>
+        <p><strong>Paper:</strong> <span id="selectedPaper">-</span></p>
+      </div>
+
+      <form id="mockConfigForm" novalidate>
+        <div class="grid">
+          <div class="field">
+            <label for="questionCount">Question Count *</label>
+            <select id="questionCount" required>
+              <option value="">Choose amount</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="30">30</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="difficulty">Difficulty *</label>
+            <select id="difficulty" required>
+              <option value="">Choose level</option>
+              <option value="Basic">Basic</option>
+              <option value="Medium">Medium</option>
+              <option value="Challenge">Challenge</option>
+              <option value="Mixed">Mixed</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="questionType">Question Type *</label>
+            <select id="questionType" required>
+              <option value="">Choose type</option>
+              <option value="Multiple Choice">Multiple Choice</option>
+              <option value="Structured">Structured</option>
+              <option value="Mixed">Mixed</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="duration">Target Duration (minutes) *</label>
+            <select id="duration" required>
+              <option value="">Choose duration</option>
+              <option value="30">30</option>
+              <option value="60">60</option>
+              <option value="90">90</option>
+              <option value="120">120</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field" style="margin-top: 14px;">
+          <label>Knowledge Points * (multi-select)</label>
+          <div class="tag-wrap" id="knowledgePoints"></div>
+        </div>
+
+        <p class="error" id="mockConfigError" aria-live="polite"></p>
+
+        <div class="actions">
+          <button class="btn btn-primary" type="submit">Generate Mock Paper (Demo)</button>
+          <button class="btn btn-secondary" type="button" id="backHomeFromConfig">Back Home</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="examData.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

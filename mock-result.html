@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mock Paper Result</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="mock-result">
+  <main class="container">
+    <section class="card">
+      <h1 class="title">Mock Paper Summary</h1>
+      <p class="subtitle">Your configuration has been captured. This page now generates practice questions from a local bank.</p>
+
+      <ul class="result-list" id="mockSummary"></ul>
+
+      <div class="notice">
+        Questions below are generated from a local demo question bank. You can later replace this with AI generation.
+      </div>
+
+      <section class="result-card">
+        <h3>Generated Mock Questions</h3>
+        <div id="generatedQuestions"></div>
+      </section>
+
+      <section class="result-card">
+        <h3>Reference Answers</h3>
+        <div id="answerKey"></div>
+      </section>
+
+      <div class="actions">
+        <button class="btn btn-secondary" id="backConfig" type="button">Back to Config</button>
+        <button class="btn btn-primary" id="backHomeFromResult" type="button">Back Home</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="examData.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

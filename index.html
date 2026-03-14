@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A-Level Learning Helper</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="home">
+  <main class="container">
+    <section class="card">
+      <h1 class="title">A-Level Learning Helper</h1>
+      <p class="subtitle">Choose your stage and exam route, then enter analysis or mock-paper flow.</p>
+
+      <div class="grid">
+        <div class="field">
+          <label for="grade">Grade</label>
+          <select id="grade"></select>
+        </div>
+        <div class="field">
+          <label for="board">Exam Board</label>
+          <select id="board"></select>
+        </div>
+        <div class="field">
+          <label for="subject">Subject</label>
+          <select id="subject"></select>
+        </div>
+        <div class="field">
+          <label for="paper">Paper</label>
+          <select id="paper"></select>
+        </div>
+      </div>
+
+      <p class="error" id="homeError" aria-live="polite"></p>
+
+      <div class="actions">
+        <button class="btn btn-secondary" id="goAnalysis" type="button">Wrong-Question Analysis</button>
+        <button class="btn btn-primary" id="goMock" type="button">Generate Mock Practice</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="examData.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
