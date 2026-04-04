@@ -1,0 +1,44 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A-Level Smart Practice</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <div class="bg-shape"></div>
+  <main class="container">
+    <section class="card hero">
+      <h1>A-Level Smart Practice</h1>
+      <p>服务国际高中生：按年级、考试局、科目、卷别精准组卷与错题诊断。</p>
+    </section>
+
+    <section class="card form-card">
+      <h2>学习路径配置</h2>
+      <div class="grid-2">
+        <label>年级
+          <select id="grade"></select>
+        </label>
+        <label>考试局
+          <select id="board"></select>
+        </label>
+        <label>科目
+          <select id="subject"></select>
+        </label>
+        <label>模块/卷别
+          <select id="paper"></select>
+        </label>
+      </div>
+      <div class="actions">
+        <button id="goGenerate" class="btn-primary">生成模拟试卷练习题</button>
+        <button id="goAnalysis" class="btn-secondary">查看错题分析示例</button>
+      </div>
+      <p class="tip">说明：当选择 CIE + Mathematics 时，会显示 P1/P2/P3/P4 等细分卷别。</p>
+    </section>
+  </main>
+
+  <script src="scripts/data.js"></script>
+  <script src="scripts/app.js"></script>
+</body>
+</html>

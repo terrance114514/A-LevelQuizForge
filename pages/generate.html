@@ -1,0 +1,49 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>生成模拟试卷</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card hero">
+      <h1>生成模拟试卷</h1>
+      <p id="selectionSummary"></p>
+    </section>
+
+    <section class="card panel">
+      <h2>组卷参数</h2>
+      <div class="grid-2">
+        <label>题目数量
+          <input id="count" type="number" min="3" max="30" value="8" />
+        </label>
+        <label>难度
+          <select id="difficulty">
+            <option>基础</option>
+            <option selected>中等</option>
+            <option>冲刺</option>
+          </select>
+        </label>
+        <label>知识点（逗号分隔）
+          <input id="topics" type="text" value="Functions,Trigonometry,Differentiation" />
+        </label>
+      </div>
+
+      <div class="actions">
+        <button id="generateBtn" class="btn-primary">确认生成题目</button>
+        <button id="backBtn" class="btn-secondary">返回首页</button>
+      </div>
+    </section>
+
+    <section class="card panel">
+      <h2>生成结果</h2>
+      <div id="paperResult"></div>
+    </section>
+  </main>
+
+  <script src="../scripts/data.js"></script>
+  <script src="../scripts/generate.js"></script>
+</body>
+</html>
