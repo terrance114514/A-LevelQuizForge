@@ -97,6 +97,31 @@ button {
 
 .panel { margin-top: 1rem; }
 
+.account-collapsible > summary {
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #244779;
+  list-style: none;
+}
+
+.account-collapsible > summary::-webkit-details-marker {
+  display: none;
+}
+
+.account-collapsible > summary::before {
+  content: "▶ ";
+  color: #2f5ea8;
+}
+
+.account-collapsible[open] > summary::before {
+  content: "▼ ";
+}
+
+.account-collapsible[open] > summary {
+  margin-bottom: 0.5rem;
+}
+
 .tag-row {
   display: flex;
   flex-wrap: wrap;
@@ -185,4 +210,71 @@ button {
 
 @media (max-width: 760px) {
   .grid-2 { grid-template-columns: 1fr; }
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(140px, 1fr));
+  gap: 0.7rem;
+}
+
+.stat-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.8rem;
+  background: #f8fbff;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.stat-value {
+  margin-top: 0.25rem;
+  font-size: 1.45rem;
+  font-weight: 800;
+  color: #1e3f74;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 840px;
+  font-size: 0.9rem;
+}
+
+.data-table th,
+.data-table td {
+  border-bottom: 1px solid var(--line);
+  padding: 0.55rem 0.6rem;
+  text-align: left;
+  vertical-align: top;
+}
+
+.data-table th {
+  background: #f1f6ff;
+  color: #2b4978;
+  font-weight: 700;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.mono {
+  font-family: "Consolas", "SFMono-Regular", "Menlo", monospace;
+  font-size: 0.82rem;
+}
+
+@media (max-width: 760px) {
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
 }

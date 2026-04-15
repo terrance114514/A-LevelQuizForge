@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>登录 / 注册</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card hero">
+      <h1>账号登录 / 注册</h1>
+      <p>登录后会自动长期保持，下次打开可自动识别。</p>
+      <p id="authStatus" class="tip"></p>
+    </section>
+
+    <section class="card panel">
+      <h2>账号信息</h2>
+      <div class="grid-2">
+        <label>姓名
+          <input id="userDisplayName" type="text" placeholder="例如：Alice" />
+        </label>
+        <label>邮箱
+          <input id="userEmail" type="email" placeholder="例如：alice@example.com" />
+        </label>
+        <label>密码
+          <input id="userPassword" type="password" placeholder="至少 6 位" />
+        </label>
+        <label>年级
+          <input id="userGrade" type="text" placeholder="例如：AS" />
+        </label>
+        <label>目标分
+          <input id="userTargetScore" type="number" min="0" max="100" placeholder="例如：85" />
+        </label>
+      </div>
+
+      <div class="actions">
+        <button id="registerBtn" class="btn-primary">注册并长期登录</button>
+        <button id="loginBtn" class="btn-primary">登录</button>
+        <button id="logoutBtn" class="btn-secondary">退出登录</button>
+        <button id="goHomeBtn" class="btn-secondary">去答题页面</button>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="../scripts/api.js"></script>
+  <script src="../scripts/login.js"></script>
+</body>
+</html>

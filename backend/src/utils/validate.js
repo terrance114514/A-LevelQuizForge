@@ -29,6 +29,14 @@ export function toClampedInteger(value, defaultValue, min, max) {
   return Math.min(max, Math.max(min, Math.round(parsed)));
 }
 
+export function toOptionalInteger(value, fieldName, min, max) {
+  if (value == null || value === "") return null;
+  if (!Number.isFinite(Number(value))) {
+    throw new ApiError(400, `Field "${fieldName}" must be a valid number.`, "INVALID_INPUT");
+  }
+  return toClampedInteger(Number(value), Number(value), min, max);
+}
+
 export function requireArray(value, fieldName) {
   if (!Array.isArray(value)) {
     throw new ApiError(400, `Field "${fieldName}" is required and must be an array.`, "INVALID_INPUT");

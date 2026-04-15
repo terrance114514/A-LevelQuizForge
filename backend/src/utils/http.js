@@ -31,6 +31,32 @@ export function errorHandler(err, _req, res, _next) {
     return;
   }
 
+  // PostgreSQL unique violation
+  if (err && err.code === "23505") {
+    res.status(409).json({
+      ok: false,
+      error: {
+        code: "CONFLICT",
+        message: "Resource already exists.",
+        details: err.detail || null,
+      },
+    });
+    return;
+  }
+
+  // PostgreSQL foreign key violation
+  if (err && err.code === "23503") {
+    res.status(400).json({
+      ok: false,
+      error: {
+        code: "INVALID_REFERENCE",
+        message: "Referenced resource does not exist.",
+        details: err.detail || null,
+      },
+    });
+    return;
+  }
+
   // eslint-disable-next-line no-console
   console.error(err);
   res.status(500).json({

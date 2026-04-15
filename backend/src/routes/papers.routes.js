@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { ApiError } from "../utils/http.js";
 import { requireArray, requireString, toClampedInteger, toStringArray } from "../utils/validate.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
 import { buildAnalysis } from "../services/analysis.service.js";
 import { evaluatePaper, buildWrongLog } from "../services/evaluation.service.js";
-import { saveGeneratedPaper, getGeneratedPaper } from "../services/paperStore.service.js";
+import { saveGeneratedPaper, getGeneratedPaper, markPaperSubmitted } from "../services/paperStore.service.js";
 import { generatePaper, sanitizeQuestion } from "../services/question.service.js";
 
 const router = Router();
@@ -27,19 +28,27 @@ function extractGenerateOptions(body) {
   };
 }
 
-router.post("/generate", (req, res) => {
+router.post("/generate", asyncHandler(async (req, res) => {
   const selection = extractSelection(req.body || {});
   const options = extractGenerateOptions(req.body || {});
+  const userId = typeof req.body?.userId === "string" ? req.body.userId.trim() : "";
 
   const generated = generatePaper(selection, options);
   const paperId = generated.questions.length
-    ? saveGeneratedPaper(selection, generated.questions)
+    ? await saveGeneratedPaper({
+      userId: userId || null,
+      selection,
+      options,
+      questions: generated.questions,
+      fallbackApplied: generated.fallbackApplied,
+    })
     : null;
 
   res.json({
     ok: true,
     data: {
       paperId,
+      userId: userId || null,
       selection,
       requestedCount: generated.requestedCount,
       totalCandidates: generated.totalCandidates,
@@ -47,16 +56,20 @@ router.post("/generate", (req, res) => {
       questions: generated.questions.map(sanitizeQuestion),
     },
   });
-});
+}));
 
-router.post("/submit", (req, res) => {
+router.post("/submit", asyncHandler(async (req, res) => {
   const body = req.body || {};
   const paperId = requireString(body.paperId, "paperId");
   const answers = requireArray(body.answers, "answers");
 
-  const paperRecord = getGeneratedPaper(paperId);
+  const paperRecord = await getGeneratedPaper(paperId);
   if (!paperRecord) {
     throw new ApiError(404, "Paper not found or expired. Please generate a new paper.", "PAPER_NOT_FOUND");
+  }
+
+  if (paperRecord.status === "submitted") {
+    throw new ApiError(409, "This paper has already been submitted.", "PAPER_ALREADY_SUBMITTED");
   }
 
   if (answers.length !== paperRecord.questions.length) {
@@ -70,6 +83,12 @@ router.post("/submit", (req, res) => {
   const result = evaluatePaper(paperRecord.questions, answers);
   const wrongLog = buildWrongLog(result.details);
   const analysis = buildAnalysis({ wrongLog, lastResult: result });
+  await markPaperSubmitted({
+    paperId,
+    answers,
+    result,
+    wrongLog,
+  });
 
   res.json({
     ok: true,
@@ -80,6 +99,6 @@ router.post("/submit", (req, res) => {
       analysis,
     },
   });
-});
+}));
 
 export default router;

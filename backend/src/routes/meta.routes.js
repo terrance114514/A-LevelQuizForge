@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { curriculumData } from "../data/curriculum.js";
 import { questionBank } from "../data/questionBank.js";
+import { isDbEnabled } from "../db/client.js";
 
 const router = Router();
 
@@ -28,6 +29,15 @@ router.get("/stats", (_req, res) => {
       totalQuestions: questionBank.length,
       boardCounts,
       subjectCounts,
+    },
+  });
+});
+
+router.get("/storage", (_req, res) => {
+  res.json({
+    ok: true,
+    data: {
+      mode: isDbEnabled() ? "postgresql" : "memory",
     },
   });
 });

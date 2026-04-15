@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>后台数据面板</title>
+  <link rel="stylesheet" href="../assets/styles.css" />
+</head>
+<body>
+  <main class="container">
+    <section class="card hero">
+      <h1>后台数据面板</h1>
+      <p>查看最近用户、练习记录与整体统计。</p>
+      <p id="adminStatus" class="tip"></p>
+    </section>
+
+    <section class="card panel">
+      <h2>筛选设置</h2>
+      <div class="grid-2">
+        <label>最近用户数量
+          <input id="usersLimit" type="number" min="1" max="100" value="10" />
+        </label>
+        <label>最近练习数量
+          <input id="practicesLimit" type="number" min="1" max="100" value="20" />
+        </label>
+      </div>
+      <div class="actions">
+        <button id="refreshBtn" class="btn-primary">刷新数据</button>
+        <button id="backHome" class="btn-secondary">返回首页</button>
+      </div>
+    </section>
+
+    <section class="card panel">
+      <h2>总览统计</h2>
+      <div id="summaryCards" class="stats-grid"></div>
+    </section>
+
+    <section class="card panel">
+      <h2>最近用户</h2>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>用户ID</th>
+              <th>姓名</th>
+              <th>邮箱</th>
+              <th>角色</th>
+              <th>年级</th>
+              <th>目标分</th>
+              <th>创建时间</th>
+            </tr>
+          </thead>
+          <tbody id="usersBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card panel">
+      <h2>最近练习记录</h2>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>练习ID</th>
+              <th>用户</th>
+              <th>科目路径</th>
+              <th>状态</th>
+              <th>正确率</th>
+              <th>创建时间</th>
+              <th>提交时间</th>
+            </tr>
+          </thead>
+          <tbody id="practicesBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="../scripts/api.js"></script>
+  <script src="../scripts/admin.js"></script>
+</body>
+</html>

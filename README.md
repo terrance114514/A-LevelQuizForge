@@ -19,6 +19,7 @@ A lightweight full-stack scaffold for international high school students studyin
 ## Run Frontend
 
 Open `index.html` directly in browser, or use a static server.
+Frontend now prefers backend APIs (`/api/*`) and falls back to local mock data if backend is unavailable.
 
 ## Run Backend
 
@@ -30,14 +31,45 @@ npm run dev
 
 Default backend URL: `http://localhost:3001`
 
+## PostgreSQL (Optional but Recommended)
+
+```bash
+cd backend
+cp .env.example .env
+# edit DATABASE_URL in .env
+npm run db:schema
+npm run dev
+```
+
+If `DATABASE_URL` is configured, generated papers and submitted practice records are persisted in PostgreSQL.
+
+## Frontend API Base URL
+
+Default API base is:
+1. `http(s)://<current-host>:3001` when opened over HTTP
+2. `http://localhost:3001` when opened via file protocol
+
+You can override it from browser console:
+
+```js
+localStorage.setItem("alevel.apiBase", "http://your-server-ip:3001");
+location.reload();
+```
+
 ## Backend API
 
 1. `GET /health`
 2. `GET /api/meta/curriculum`
 3. `GET /api/meta/stats`
-4. `POST /api/papers/generate`
-5. `POST /api/papers/submit`
-6. `POST /api/analysis`
+4. `GET /api/meta/storage`
+5. `POST /api/papers/generate`
+6. `POST /api/papers/submit`
+7. `POST /api/analysis`
+8. `GET /api/users`
+9. `POST /api/users`
+10. `GET /api/users/:userId`
+11. `GET /api/users/:userId/practices`
+12. `GET /api/admin/records`
 
 ### Example: Generate Paper
 
@@ -51,6 +83,7 @@ curl -X POST http://localhost:3001/api/papers/generate \
       "subject": "Mathematics",
       "paper": "P1"
     },
+    "userId": "optional-user-id",
     "options": {
       "count": 5,
       "difficulty": "中等",
@@ -75,10 +108,13 @@ curl -X POST http://localhost:3001/api/papers/submit \
 - `index.html`: Home/selection page
 - `pages/generate.html`: Mock paper generation page
 - `pages/analysis.html`: Wrong-question analysis page
+- `pages/admin.html`: Admin data dashboard page
 - `scripts/data.js`: Curriculum and question bank seed data
+- `scripts/api.js`: Frontend API client
 - `scripts/app.js`: Shared logic
 - `scripts/generate.js`: Generator logic
 - `scripts/analysis.js`: Analysis logic
+- `scripts/admin.js`: Admin dashboard logic
 - `PROMPTS.md`: Prompt templates for generating a mini-program
 - `backend/`: Express API service
 
