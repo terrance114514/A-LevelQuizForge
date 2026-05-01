@@ -10,6 +10,12 @@ export const questionBank = [
     options: ["(x-3)/2", "(x+3)/2", "2x-3", "1/(2x+3)"],
     answer: 0,
     mistakeType: "concept",
+    templateId: "fn-inverse-linear",
+    skills: ["inverse-functions", "algebra-rearrangement"],
+    hints: [
+      "Let y = 2x + 3, then swap x and y.",
+      "Rearrange x = 2y + 3 to make y the subject.",
+    ],
   },
   {
     id: "CIE-MATH-P1-002",
@@ -22,6 +28,12 @@ export const questionBank = [
     options: ["30, 150", "45, 135", "60, 120", "0, 180"],
     answer: 0,
     mistakeType: "calculation",
+    templateId: "trig-basic-angles",
+    skills: ["trig-equations", "unit-circle"],
+    hints: [
+      "Start from sin(x)=1/2 and recall special angles.",
+      "Find all angles in 0<=x<360 where sin is positive.",
+    ],
   },
   {
     id: "CIE-MATH-P2-001",
@@ -34,6 +46,12 @@ export const questionBank = [
     options: ["x=-1,3", "x=1,-3", "x=0,3", "x=-1,-3"],
     answer: 0,
     mistakeType: "question_reading",
+    templateId: "stationary-points-cubic",
+    skills: ["differentiation", "stationary-points"],
+    hints: [
+      "Differentiate the cubic first.",
+      "Set dy/dx = 0 and solve the quadratic.",
+    ],
   },
   {
     id: "CIE-MATH-P3-001",
@@ -46,6 +64,12 @@ export const questionBank = [
     options: ["32", "30", "26", "24"],
     answer: 0,
     mistakeType: "calculation",
+    templateId: "definite-integral-polynomial",
+    skills: ["integration", "definite-integral"],
+    hints: [
+      "Find an antiderivative term by term.",
+      "Apply upper limit minus lower limit carefully.",
+    ],
   },
   {
     id: "CIE-MATH-P4-001",
@@ -63,6 +87,12 @@ export const questionBank = [
     ],
     answer: 0,
     mistakeType: "concept",
+    templateId: "vector-angle-formula",
+    skills: ["vectors", "dot-product"],
+    hints: [
+      "Angle between vectors comes from the dot product formula.",
+      "Use cos(theta) = (a.b)/(|a||b|).",
+    ],
   },
   {
     id: "CIE-PHY-AS-001",
@@ -75,6 +105,12 @@ export const questionBank = [
     options: ["10 m/s", "7 m/s", "2.5 m/s", "5 m/s"],
     answer: 0,
     mistakeType: "calculation",
+    templateId: "kinematics-uv-at",
+    skills: ["kinematics", "equations-of-motion"],
+    hints: [
+      "Choose v = u + at.",
+      "Substitute u=0, a=2, t=5.",
+    ],
   },
   {
     id: "CIE-MATH-P1-003",
@@ -87,6 +123,12 @@ export const questionBank = [
     options: ["x^2-3x-10", "x^2+3x-10", "x^2-10", "x^2-7x+10"],
     answer: 0,
     mistakeType: "calculation",
+    templateId: "algebra-expand-binomial",
+    skills: ["algebra", "expansion"],
+    hints: [
+      "Multiply each term in the first bracket by each term in the second.",
+      "Combine like terms at the end.",
+    ],
   },
   {
     id: "CIE-MATH-P2-002",
@@ -99,6 +141,12 @@ export const questionBank = [
     options: ["32", "25", "10", "64"],
     answer: 0,
     mistakeType: "concept",
+    templateId: "logarithm-to-exponential",
+    skills: ["logarithms", "indices"],
+    hints: [
+      "Rewrite log2(x)=5 into exponential form.",
+      "What number equals 2 to the power of 5?",
+    ],
   },
   {
     id: "CIE-MATH-P3-002",
@@ -111,6 +159,12 @@ export const questionBank = [
     options: ["P(A)P(B)", "P(A)+P(B)", "P(A)-P(B)", "1-P(A)"],
     answer: 0,
     mistakeType: "concept",
+    templateId: "probability-independent-events",
+    skills: ["probability", "independence"],
+    hints: [
+      "For independent events, intersection uses multiplication.",
+      "Use P(A∩B)=P(A)P(B).",
+    ],
   },
 ];
 

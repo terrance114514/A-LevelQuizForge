@@ -33,6 +33,12 @@ window.QUESTION_BANK = [
     options: ["(x-3)/2", "(x+3)/2", "2x-3", "1/(2x+3)"],
     answer: 0,
     mistakeType: "concept",
+    templateId: "fn-inverse-linear",
+    skills: ["inverse-functions", "algebra-rearrangement"],
+    hints: [
+      "令 y=2x+3，然后交换 x 与 y。",
+      "把 x=2y+3 变形成 y=...。",
+    ],
   },
   {
     id: "CIE-MATH-P1-002",
@@ -45,6 +51,12 @@ window.QUESTION_BANK = [
     options: ["30, 150", "45, 135", "60, 120", "0, 180"],
     answer: 0,
     mistakeType: "calculation",
+    templateId: "trig-basic-angles",
+    skills: ["trig-equations", "unit-circle"],
+    hints: [
+      "先化为 sin(x)=1/2，回忆特殊角。",
+      "在 0<=x<360 内找正弦为正的解。",
+    ],
   },
   {
     id: "CIE-MATH-P2-001",
@@ -57,6 +69,12 @@ window.QUESTION_BANK = [
     options: ["x=-1,3", "x=1,-3", "x=0,3", "x=-1,-3"],
     answer: 0,
     mistakeType: "question_reading",
+    templateId: "stationary-points-cubic",
+    skills: ["differentiation", "stationary-points"],
+    hints: [
+      "先对函数求导。",
+      "令导数为 0，解出驻点横坐标。",
+    ],
   },
   {
     id: "CIE-MATH-P3-001",
@@ -69,6 +87,12 @@ window.QUESTION_BANK = [
     options: ["32", "30", "26", "24"],
     answer: 0,
     mistakeType: "calculation",
+    templateId: "definite-integral-polynomial",
+    skills: ["integration", "definite-integral"],
+    hints: [
+      "先逐项求原函数。",
+      "再做上限减下限。",
+    ],
   },
   {
     id: "CIE-MATH-P4-001",
@@ -81,6 +105,12 @@ window.QUESTION_BANK = [
     options: ["Use cos(theta)=a.b/|a||b|", "Use sin(theta)=a+b", "Use |a-b| only", "Cannot be found"],
     answer: 0,
     mistakeType: "concept",
+    templateId: "vector-angle-formula",
+    skills: ["vectors", "dot-product"],
+    hints: [
+      "向量夹角用点积公式。",
+      "cos(theta)=(a.b)/(|a||b|)。",
+    ],
   },
   {
     id: "CIE-PHY-AS-001",
@@ -93,6 +123,12 @@ window.QUESTION_BANK = [
     options: ["10 m/s", "7 m/s", "2.5 m/s", "5 m/s"],
     answer: 0,
     mistakeType: "calculation",
+    templateId: "kinematics-uv-at",
+    skills: ["kinematics", "equations-of-motion"],
+    hints: [
+      "优先使用 v=u+at。",
+      "代入 u=0,a=2,t=5。",
+    ],
   },
   {
     id: "CIE-MATH-P1-003",
@@ -105,6 +141,12 @@ window.QUESTION_BANK = [
     options: ["x^2-3x-10", "x^2+3x-10", "x^2-10", "x^2-7x+10"],
     answer: 0,
     mistakeType: "calculation",
+    templateId: "algebra-expand-binomial",
+    skills: ["algebra", "expansion"],
+    hints: [
+      "括号展开时逐项相乘。",
+      "最后合并同类项。",
+    ],
   },
   {
     id: "CIE-MATH-P2-002",
@@ -117,6 +159,12 @@ window.QUESTION_BANK = [
     options: ["32", "25", "10", "64"],
     answer: 0,
     mistakeType: "concept",
+    templateId: "logarithm-to-exponential",
+    skills: ["logarithms", "indices"],
+    hints: [
+      "把 log 形式改写为指数形式。",
+      "2 的 5 次方是多少？",
+    ],
   },
   {
     id: "CIE-MATH-P3-002",
@@ -129,6 +177,12 @@ window.QUESTION_BANK = [
     options: ["P(A)P(B)", "P(A)+P(B)", "P(A)-P(B)", "1-P(A)"],
     answer: 0,
     mistakeType: "concept",
+    templateId: "probability-independent-events",
+    skills: ["probability", "independence"],
+    hints: [
+      "独立事件交集用乘法。",
+      "套用 P(A∩B)=P(A)P(B)。",
+    ],
   },
 ];
 
