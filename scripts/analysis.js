@@ -72,6 +72,14 @@
     });
   }
 
+  function renderHintRate(rate) {
+    if (rate == null) return;
+    const summary = document.createElement("p");
+    summary.className = "tip";
+    summary.textContent = `提示依赖率：${Number(rate).toFixed(1)}%（使用过提示的题目占比）`;
+    byId("analysisMode").after(summary);
+  }
+
   const raw = localStorage.getItem("alevel.selection");
   const selection = raw ? JSON.parse(raw) : null;
   byId("selectionSummary").textContent = selection
@@ -102,11 +110,16 @@
       });
       renderBars(analysis.bars || []);
       renderAdvices(analysis.advices || []);
+      renderHintRate(analysis.hintRate);
       setMode("分析结果来自后端 API。", false);
     } catch (_err) {
       const localAnalysis = buildLocalAnalysis(logs, lastResult);
       renderBars(localAnalysis.bars || []);
       renderAdvices(localAnalysis.advices || []);
+      if (lastResult && typeof lastResult.total === "number" && lastResult.total > 0) {
+        const rate = ((lastResult.hintUsedQuestions || 0) / lastResult.total) * 100;
+        renderHintRate(rate);
+      }
       setMode("后端分析不可用，当前展示本地规则分析。", true);
     }
   })();

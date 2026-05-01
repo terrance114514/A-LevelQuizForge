@@ -33,9 +33,19 @@ export function buildAnalysis(input = {}) {
     advices.unshift("本周建议先降难度到“基础/中等”，先把正确率稳定到70%以上，再冲刺高难题。");
   }
 
+  const hintUsedQuestions = Number(lastResult?.hintUsedQuestions || 0);
+  const total = Number(lastResult?.total || 0);
+  const hintRate = total ? (hintUsedQuestions / total) * 100 : 0;
+  if (hintRate >= 50) {
+    advices.unshift("提示依赖偏高：本周先进行 2 次无提示限时训练，再用提示做复盘对照。");
+  } else if (hintRate > 0) {
+    advices.push("提示使用适中：建议先独立作答，只有卡住超过2分钟再查看下一条提示。");
+  }
+
   return {
     bars,
     weakTopics,
     advices,
+    hintRate: Number(hintRate.toFixed(1)),
   };
 }
