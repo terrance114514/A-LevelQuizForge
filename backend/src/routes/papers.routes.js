@@ -80,12 +80,29 @@ router.post("/submit", asyncHandler(async (req, res) => {
     );
   }
 
-  const result = evaluatePaper(paperRecord.questions, answers);
+  const normalizedAnswers = answers.map((item) => {
+    if (Number.isInteger(item)) {
+      return item;
+    }
+    if (item && typeof item === "object" && Number.isInteger(item.selectedIndex)) {
+      return item.selectedIndex;
+    }
+    return -1;
+  });
+
+  const result = evaluatePaper(paperRecord.questions, normalizedAnswers);
+  result.hintUsedQuestions = answers.filter((item) => item && typeof item === "object" && Number(item.hintsUsed || 0) > 0).length;
+  result.totalHintClicks = answers.reduce((sum, item) => {
+    if (item && typeof item === "object") {
+      return sum + Number(item.hintsUsed || 0);
+    }
+    return sum;
+  }, 0);
   const wrongLog = buildWrongLog(result.details);
   const analysis = buildAnalysis({ wrongLog, lastResult: result });
   await markPaperSubmitted({
     paperId,
-    answers,
+    answers: normalizedAnswers,
     result,
     wrongLog,
   });

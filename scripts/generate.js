@@ -35,6 +35,13 @@
     return answers;
   }
 
+  function buildSubmitPayload(answers, hintUsageMap) {
+    return answers.map((selectedIndex, idx) => ({
+      selectedIndex: Number.isInteger(selectedIndex) ? selectedIndex : -1,
+      hintsUsed: Number(hintUsageMap?.[idx]?.used || 0),
+    }));
+  }
+
   function applyFeedback(details) {
     details.forEach((row, idx) => {
       const feedback = byId(`feedback_${idx}`);
@@ -53,6 +60,17 @@
     });
   }
 
+  function initHintState(questions) {
+    const map = {};
+    (questions || []).forEach((q, idx) => {
+      map[idx] = {
+        used: 0,
+        total: Array.isArray(q.hints) ? q.hints.length : 0,
+      };
+    });
+    return map;
+  }
+
   function buildWrongLog(details) {
     const logs = {};
     details.forEach((d) => {
@@ -65,7 +83,7 @@
     return Object.values(logs);
   }
 
-  function evaluateLocal(questions, answers) {
+  function evaluateLocal(questions, answers, hintUsageMap) {
     let correct = 0;
     const details = [];
 
@@ -78,21 +96,53 @@
       details.push({
         id: q.id,
         topic: q.topic,
+        skills: Array.isArray(q.skills) ? q.skills : [],
         mistakeType: q.mistakeType || "concept",
         correct: ok,
         selectedIndex,
         answer: q.answer,
+        hintsUsed: Number(hintUsageMap?.[idx]?.used || 0),
+        hintTotal: Array.isArray(q.hints) ? q.hints.length : 0,
       });
     }
+
+    const hintRows = Object.values(hintUsageMap || {});
+    const hintUsedQuestions = hintRows.filter((x) => x.used > 0).length;
+    const totalHintClicks = hintRows.reduce((sum, x) => sum + (x.used || 0), 0);
 
     return {
       total: questions.length,
       correct,
       wrong: questions.length - correct,
       accuracy: questions.length ? (correct / questions.length) * 100 : 0,
+      hintUsedQuestions,
+      totalHintClicks,
       details,
       submittedAt: new Date().toISOString(),
     };
+  }
+
+  function buildDifficultyTargets(total, preferredDifficulty) {
+    const defaultRatio = { "基础": 0.4, "中等": 0.4, "冲刺": 0.2 };
+    if (preferredDifficulty && defaultRatio[preferredDifficulty] != null) {
+      return { "基础": 0, "中等": 0, "冲刺": 0, [preferredDifficulty]: total };
+    }
+
+    const keys = Object.keys(defaultRatio);
+    const targets = { "基础": 0, "中等": 0, "冲刺": 0 };
+    let used = 0;
+    const rows = keys.map((key) => {
+      const exact = defaultRatio[key] * total;
+      const floor = Math.floor(exact);
+      targets[key] = floor;
+      used += floor;
+      return { key, rem: exact - floor };
+    });
+    rows.sort((a, b) => b.rem - a.rem);
+    for (let i = used; i < total; i += 1) {
+      targets[rows[(i - used) % rows.length].key] += 1;
+    }
+    return targets;
   }
 
   function pickLocalPaper(selection, options) {
@@ -103,9 +153,16 @@
         q.paper === selection.paper
     );
 
-    pool = pool.filter(
-      (q) => q.difficulty === options.difficulty || options.topics.includes(q.topic)
-    );
+    if (options.difficulty || options.topics.length) {
+      const refined = pool.filter((q) => {
+        const matchDiff = options.difficulty ? q.difficulty === options.difficulty : false;
+        const matchTopic = options.topics.length ? options.topics.includes(q.topic) : false;
+        return matchDiff || matchTopic;
+      });
+      if (refined.length) {
+        pool = refined;
+      }
+    }
 
     if (pool.length === 0) {
       pool = window.QUESTION_BANK.filter(
@@ -113,7 +170,43 @@
       );
     }
 
-    return shuffle(pool).slice(0, options.count);
+    const shuffled = shuffle(pool);
+    const targets = buildDifficultyTargets(options.count, options.difficulty);
+    const usedTemplateIds = new Set();
+    const selected = [];
+
+    Object.entries(targets).forEach(([difficulty, limit]) => {
+      if (!limit) return;
+      const bucket = shuffled.filter((q) => q.difficulty === difficulty);
+      bucket.forEach((q) => {
+        if (selected.length >= options.count || selected.filter((x) => x.difficulty === difficulty).length >= limit) {
+          return;
+        }
+        const templateId = q.templateId || q.id;
+        if (!usedTemplateIds.has(templateId)) {
+          selected.push(q);
+          usedTemplateIds.add(templateId);
+        }
+      });
+    });
+
+    shuffled.forEach((q) => {
+      if (selected.length >= options.count) return;
+      const templateId = q.templateId || q.id;
+      if (!usedTemplateIds.has(templateId)) {
+        selected.push(q);
+        usedTemplateIds.add(templateId);
+      }
+    });
+
+    if (selected.length < options.count) {
+      shuffled.forEach((q) => {
+        if (selected.length >= options.count) return;
+        if (!selected.includes(q)) selected.push(q);
+      });
+    }
+
+    return selected.slice(0, options.count);
   }
 
   function persistResult(result, wrongLog) {
@@ -128,6 +221,7 @@
       <h3>本次成绩</h3>
       <p>得分：<strong>${result.correct}/${result.total}</strong></p>
       <p>正确率：<strong class='${level}'>${result.accuracy.toFixed(1)}%</strong></p>
+      <p>提示使用：<strong>${result.hintUsedQuestions || 0}</strong>题，累计<strong>${result.totalHintClicks || 0}</strong>次</p>
       <p class='tip'>提交时间：${new Date(result.submittedAt).toLocaleString()}</p>
     `;
   }
@@ -143,7 +237,7 @@
 
     const hint = document.createElement("p");
     hint.className = "tip";
-    hint.textContent = "请选择每道题答案后点击“提交并判分”。";
+    hint.textContent = "可先作答再判分；若卡住可按题目下方“显示提示”逐步获取线索。";
     wrap.appendChild(hint);
 
     picked.forEach((q, idx) => {
@@ -169,6 +263,10 @@
           <span class="tag">${q.difficulty}</span>
         </div>
         <div class="options-wrap">${optionsHtml}</div>
+        <div class="actions">
+          <button class='btn-secondary' id='hintBtn_${idx}'>显示提示</button>
+        </div>
+        <div id="hint_${idx}" class="tip"></div>
         <div id="feedback_${idx}" class="tip"></div>
       `;
       wrap.appendChild(box);
@@ -195,6 +293,7 @@
     mode: "backend",
     paperId: null,
     questions: [],
+    hintUsageMap: {},
   };
 
   const summaryEl = byId("selectionSummary");
@@ -239,6 +338,7 @@
       state.mode = "backend";
       state.paperId = data.paperId;
       state.questions = data.questions || [];
+      state.hintUsageMap = initHintState(state.questions);
       localStorage.setItem("alevel.generatedPaper", JSON.stringify(state.questions));
       renderPaper(state.questions);
 
@@ -250,6 +350,7 @@
       state.mode = "local";
       state.paperId = null;
       state.questions = pickLocalPaper(selection, options);
+      state.hintUsageMap = initHintState(state.questions);
       localStorage.setItem("alevel.generatedPaper", JSON.stringify(state.questions));
       renderPaper(state.questions);
       setRunMode("后端组卷失败，已回退到本地示例题库。", true);
@@ -265,6 +366,24 @@
     const toAnalysis = byId("toAnalysis");
     if (!submitBtn || !toAnalysis) return;
 
+    state.questions.forEach((q, idx) => {
+      const hintBtn = byId(`hintBtn_${idx}`);
+      const hintEl = byId(`hint_${idx}`);
+      if (!hintBtn || !hintEl) return;
+      hintBtn.onclick = () => {
+        const hints = Array.isArray(q.hints) ? q.hints : [];
+        if (!hints.length) {
+          hintEl.textContent = "该题暂无提示，请先尝试拆分题干条件。";
+          return;
+        }
+        const row = state.hintUsageMap[idx];
+        const nextIndex = Math.min(row.used, hints.length - 1);
+        hintEl.textContent = `提示 ${nextIndex + 1}/${hints.length}: ${hints[nextIndex]}`;
+        row.used += 1;
+        hintBtn.textContent = row.used >= hints.length ? "提示已全部显示" : "显示下一条提示";
+      };
+    });
+
     submitBtn.onclick = async () => {
       if (!state.questions.length) return;
 
@@ -274,10 +393,12 @@
         if (state.mode === "backend" && state.paperId && window.ALevelApi) {
           const data = await window.ALevelApi.submitPaper({
             paperId: state.paperId,
-            answers,
+            answers: buildSubmitPayload(answers, state.hintUsageMap),
           });
           const result = data.result;
           const wrongLog = data.wrongLog || buildWrongLog(result.details || []);
+          result.hintUsedQuestions = Object.values(state.hintUsageMap).filter((x) => x.used > 0).length;
+          result.totalHintClicks = Object.values(state.hintUsageMap).reduce((sum, x) => sum + (x.used || 0), 0);
           applyFeedback(result.details || []);
           persistResult(result, wrongLog);
           renderScore(result);
@@ -287,7 +408,7 @@
 
         throw new Error("backend mode unavailable");
       } catch (_err) {
-        const result = evaluateLocal(state.questions, answers);
+        const result = evaluateLocal(state.questions, answers, state.hintUsageMap);
         const wrongLog = buildWrongLog(result.details || []);
         applyFeedback(result.details || []);
         persistResult(result, wrongLog);

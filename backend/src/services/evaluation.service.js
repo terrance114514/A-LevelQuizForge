@@ -14,10 +14,12 @@ export function evaluatePaper(questions, answers) {
     details.push({
       id: question.id,
       topic: question.topic,
+      skills: Array.isArray(question.skills) ? question.skills : [],
       mistakeType: question.mistakeType || "concept",
       correct: isCorrect,
       selectedIndex,
       answer: question.answer,
+      hintsUsed: 0,
     });
   });
 
