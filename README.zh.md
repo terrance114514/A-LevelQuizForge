@@ -2,6 +2,9 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+其他语言版本: <br>
+[![English](https://img.shields.io/badge/English-blue)](README.md) [![中文](https://img.shields.io/badge/中文-blue)](README.zh.md)
+
 **一款为 A-Level 学生设计的智能互动网页工具，用于分析错题并生成自定义模拟练习试卷。**
 
 纯原生 JavaScript + HTML5 + CSS3 构建 —— 无框架、无后端，开箱即用。
