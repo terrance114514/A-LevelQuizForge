@@ -1,5 +1,7 @@
 # A-Level Quiz Forge
 
+Read this in other languages: [English](README.md), [中文](README.zh.md).
+
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **A smart, interactive web tool for A-Level students to analyse wrong answers and generate custom mock practice papers.**
